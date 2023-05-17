@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
-import ExchangeRates from '@/frontend/views/ExchangeRates.vue'
+import Calculator from '@/frontend/views/Calculator.vue'
 
 const routes: RouteRecordRaw[] = [
-    {name: 'ExchangeRates', path: '/exchange-rates', component: ExchangeRates},
+    {name: 'Calculator', path: '/calculator', component: Calculator},
 ]
 
 const router = createRouter({history: createWebHistory(), routes})

@@ -11,5 +11,5 @@ app.use(router)
 // delay mount so we can load configuration
 setTimeout(() => {
   installShared(app, 'vue_wp_plugin_config_admin')
-  app.mount('#vue-admin-app')
+  app.mount('#wp-credit-calc-admin-app')
 }, 200)

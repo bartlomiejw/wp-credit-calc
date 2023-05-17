@@ -167,7 +167,7 @@ class SettingController extends \WP_REST_Controller {
 			$settings_details = $options['options'];
 
 			foreach ( $settings_details as $id => $details ) {
-				//var_dump($details);
+//				var_dump($details);
 				if ( isset( $details['optionsCallback'] ) ) {
 					$options['options'][ $id ]['options'] = call_user_func( $details['optionsCallback'], $details );
 				}
@@ -236,21 +236,15 @@ class SettingController extends \WP_REST_Controller {
 					break;
 				case 'dropdown':
 				case 'dropdownMultiselect':
-					$sanitized_value = [];
-
-					if ( ! is_array( $value ) ) {
-						$value = explode( ',', $value );
-					}
-
-//					foreach ( $value as $option ) {
-//						if ( array_key_exists( $option, $details['options'] ) ) {
-//							$sanitized_value[] = $option;
-//						}
-//					}
+				case 'repeater':
+					$sanitized_value = array();
 
 					if ( is_array( $value ) ) {
-						foreach ( $value as $key => $option ) {
-							$sanitized_value[$key] = trim( $option );
+						foreach($value as $row => $innerArray){
+							$sanitized_value[ $row ] = $innerArray;
+							foreach($innerArray as $key => $option){
+								$sanitized_value[ $row ][ $key ] = trim( $option );
+							}
 						}
 					}
 
@@ -258,6 +252,8 @@ class SettingController extends \WP_REST_Controller {
 					if ( $details['type'] === 'drodown' ) {
 						$sanitized_value = $sanitized_value[0];
 					}
+
+					var_dump($sanitized_value);
 
 					break;
 				case 'textarea':

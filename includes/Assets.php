@@ -28,15 +28,29 @@ class Assets {
 
 		// add type="module" to specific script tag
 		add_filter( 'script_loader_tag', function ( $tag, $handle ) {
+			global $post;
 			# add script handles to the array below
-			$scripts_to_defer = array( 'CreditCalc-vendor', 'CreditCalc-frontend', 'CreditCalc-admin' );
-
-			if ( in_array( $handle, $scripts_to_defer, true ) ) {
-				return str_replace( ' src', '  type="module" src', $tag );
-			}
-
-			if ( in_array( $handle, $scripts_to_defer, true ) ) {
-				return str_replace( 'text/javascript', 'module', $tag );
+			$scripts_to_defer = array( 'creditcalc-vendor', 'creditcalc-frontend', 'creditcalc-admin' );
+			foreach ( $this->get_scripts() as $script ) {
+				$is_backend = isset( $script['script_place'] ) ? $script['script_place'] : false;
+				if ( $is_backend === 'backend' && is_admin() ) {
+					if ( in_array( $handle, $scripts_to_defer, true ) ) {
+						return str_replace( ' src', '  type="module" src', $tag );
+					}
+					if ( in_array( $handle, $scripts_to_defer, true ) ) {
+						return str_replace( 'text/javascript', 'module', $tag );
+					}
+				} elseif ( $is_backend !== 'backend' ) {
+					$post_content = ! empty( $post ) ? $post->post_content : false;
+					if ( has_shortcode( $post_content, 'creditcalc-vue-app' ) ) {
+						if ( in_array( $handle, $scripts_to_defer, true ) ) {
+							return str_replace( ' src', '  type="module" src', $tag );
+						}
+						if ( in_array( $handle, $scripts_to_defer, true ) ) {
+							return str_replace( 'text/javascript', 'module', $tag );
+						}
+					}
+				}
 			}
 
 			return $tag;
@@ -62,16 +76,15 @@ class Assets {
 	 */
 	private function register_scripts( $scripts ) {
 		foreach ( $scripts as $handle => $script ) {
-			$deps      = isset( $script['deps'] ) ? $script['deps'] : false;
-			$in_footer = isset( $script['in_footer'] ) ? $script['in_footer'] : false;
+			$deps       = isset( $script['deps'] ) ? $script['deps'] : false;
+			$in_footer  = isset( $script['in_footer'] ) ? $script['in_footer'] : false;
 			$is_backend = isset( $script['script_place'] ) ? $script['script_place'] : false;
 
-			if ($is_backend === 'backend' && is_admin()) {
+			if ( $is_backend === 'backend' && is_admin() ) {
 				wp_enqueue_script( $handle, $script['src'], $deps, null, $in_footer );
-			} elseif ($is_backend !== 'backend') {
+			} elseif ( $is_backend !== 'backend' ) {
 				wp_enqueue_script( $handle, $script['src'], $deps, null, $in_footer );
 			}
-
 		}
 	}
 

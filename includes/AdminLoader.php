@@ -97,7 +97,7 @@ class AdminLoader
 
         wp_localize_script($this->prefix.'-admin', 'vue_wp_plugin_config_admin', $appVars);
 
-        $content = '<div class="admin-app-wrapper"><div id="vue-admin-app"></div></div>';
+        $content = '<div class="admin-app-wrapper"><div id="wp-credit-calc-admin-app"></div></div>';
         echo $content;
     }
 }
