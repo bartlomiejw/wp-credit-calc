@@ -42,7 +42,7 @@ const doLoad = async () => {
     viewComponent = route.query.comp
   }
   if (!viewComponent) {
-    viewComponent = 'Home'
+    viewComponent = 'home'
   }
   componentName.value = viewComponent
   // make sure data is loaded before ui render

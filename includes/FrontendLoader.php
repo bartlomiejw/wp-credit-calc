@@ -51,7 +51,7 @@ class FrontendLoader {
 		// See Assets.php to add additional frontend js and css
 		$a = shortcode_atts( [
 			'postfix' => 'frontend',
-			'view'    => 'Home',
+			'view'    => 'home',
 			'name'    => ''
 		], $atts );
 
@@ -67,9 +67,12 @@ class FrontendLoader {
 			'pluginUrl'     => rtrim( \CreditCalc\Main::$BASEURL, '/' ),
 			'settings'      => $settingController->get_settings_raw(),
 		] );
-		wp_localize_script( $this->prefix . '-' . $postfix, 'vue_wp_plugin_config_frontend', $appVars );
 
-		$content .= '<div id="vue-frontend-app" ></div>';
+		wp_localize_script( $this->prefix . '-' . $postfix, 'vue_wp_plugin_config_frontend_app_'. esc_attr(
+			$a['name'] ),
+			$appVars );
+
+		$content .= '<div id="app-'.esc_attr( $a['name'] ).'" class="calculator"></div>';
 
 		return $content;
 	}

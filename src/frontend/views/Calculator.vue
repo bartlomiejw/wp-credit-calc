@@ -4,13 +4,15 @@ import type {CSSProperties} from 'vue'
 import {getConfig} from '@/shared/pluginHelpers'
 
 defineComponent({
-  name: 'Calculator',
+  name: 'calculator',
 })
 const adminConfig = getConfig()
 const settings = adminConfig.settings
 const calculatorName = adminConfig.calcName
 const calculatorSettings = settings.credit_calc_settings.find(o => o.id === calculatorName);
-
+console.log(settings.credit_calc_settings)
+console.log(calculatorName)
+console.log(calculatorSettings)
 // <--- REACTIVE ---> //
 const calculator = {
   content: {
@@ -78,7 +80,7 @@ const monthRate = computed(() => {
 </script>
 
 <template>
-  <div class="app-calculator">
+  <div class="calculator">
     <el-row :gutter="24">
       <el-col :span="24">
         <h2 class="title">{{ calculator.content.header }}</h2>
@@ -195,7 +197,7 @@ const monthRate = computed(() => {
   height: 10px;
 }
 
-.app-calculator {
+.calculator {
   background-color: v-bind('calculator.styles.backgroundColor');
   padding: 16px 20px;
   font-size: 18px;
